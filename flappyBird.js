@@ -28,6 +28,7 @@ var jump = 2;
 var gravity = 0.035;
 var vY = 0;
 var score = 0;
+var paused = false;
 // audio files
 
 var fly = new Audio();
@@ -39,6 +40,21 @@ scor.src = "sounds/score.mp3";
 // on key down
 
 document.addEventListener("keydown", moveUp);
+document.addEventListener('keydown', pauseGameKeyHandler, false);
+
+function togglePause() {
+    paused = !paused;
+    draw();
+}
+
+function pauseGameKeyHandler(e) {
+    var keyCode = e.keyCode;
+    switch(keyCode){
+       case 32: //space
+         togglePause();
+         break;
+     }
+}
 
 function moveUp() {
     vY = jump;
@@ -59,8 +75,11 @@ pipe[0] = {
 
 function draw() {
 
-    ctx.drawImage(bg, 0, 0, 512, 512);
+    ctx.drawImage(bg, 0, 0, cvs.height, cvs.height);
 
+    pipe = pipe.filter(function(item) {
+        return item.x > -60
+    })
 
     for (var i = 0; i < pipe.length; i++) {
 
@@ -79,10 +98,9 @@ function draw() {
 
         // detect collision
 
-        if (bX + bird.width-2 >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipeNorth.height || bY + bird.height-2 >= pipe[i].y + constant) || bY + bird.height -2 >= cvs.height - fg.height) {
+        if (bX + bird.width-2 >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipeNorth.height || bY + bird.height-2 >= pipe[i].y + constant) || bY + bird.height >= cvs.height - fg.height) {
             location.reload(); // reload the page
         }
-
         if (pipe[i].x == 5) {
             score++;
             scor.play();
@@ -91,7 +109,7 @@ function draw() {
 
     }
 
-    ctx.drawImage(fg, 0, cvs.height - fg.height, 512, fg.height);
+    ctx.drawImage(fg, 0, cvs.height - fg.height, cvs.height, fg.height);
 
     ctx.drawImage(bird, bX, bY);
 
@@ -102,7 +120,10 @@ function draw() {
     ctx.font = "20px Verdana";
     ctx.fillText("Score : " + score, 10, cvs.height - 20);
 
-    requestAnimationFrame(draw);
+    if(!paused) {
+        requestAnimationFrame(draw);
+     }
+     
 
 }
 
