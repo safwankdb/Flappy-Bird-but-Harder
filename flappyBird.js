@@ -124,6 +124,7 @@ function draw() {
         // detect collision
         if (bX + bird.width - 2 >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipe[i].offset + pipeNorth.height || bY + bird.height - 2 >= pipe[i].y + pipe[i].offset + constant)) {
             location.reload(); // reload the page
+            return;
         }
         if (pipe[i].x <= 0 && !pipe[i].passed) {
             score++;
@@ -142,6 +143,7 @@ function draw() {
     t++;
     if (bY + bird.height >= cvs.height - fg.height) {
         location.reload();
+        return;
     }
     if (!paused) {
         requestAnimationFrame(draw);
