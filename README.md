@@ -1,6 +1,6 @@
 # FlappyBird JS
 
-Trying to fix a flappy bird forked from a shitty implementation.
+Trying to fix a flappy bird forked from a shitty implementation. First JS project btw.
 
 ## TODO
 
@@ -15,7 +15,7 @@ Trying to fix a flappy bird forked from a shitty implementation.
 - [x] Random pipe length
 - [x] Random distance between obstacles
 - [x] Oscillating pipes??
-- [ ] Increasing speed with time?
-- [ ] Fix hit detection with a relax parameter?
+- [x] Increasing speed with time?
+- [x] Fix hit detection with a relax parameter?
 - [ ] Rewrite hit detection with distance transform??
 - [ ] Add more assets??
