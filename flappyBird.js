@@ -75,7 +75,10 @@ var pipe = [];
 for (var i = 0; i < 3; i++) {
     pipe.push({
         x: cvs.width + 200 * i + Math.floor(100 * gaussianRandom(5)),
-        y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height
+        y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height,
+        freq: 2 * Math.PI * gaussianRandom(5) * 1 / 500,
+        A: 20 + 50 * gaussianRandom(5),
+        offset: 0,
     }
     )
 }
@@ -87,18 +90,25 @@ function draw() {
         return item.x > -60
     })
     for (var i = 0; i < pipe.length; i++) {
-        constant = pipeNorth.height + 80+40*Math.floor(gaussianRandom(3));
-        ctx.drawImage(pipeNorth, pipe[i].x, pipe[i].y);
-        ctx.drawImage(pipeSouth, pipe[i].x, pipe[i].y + constant);
+        pipe[i].offset = pipe[i].A * Math.sin(pipe[i].freq * pipe[i].x);
+        pipe[i].offset = Math.min(pipe[i].offset, -pipe[i].y);  
+    }
+    for (var i = 0; i < pipe.length; i++) {
+        constant = pipeNorth.height + 80 + 40 * Math.floor(gaussianRandom(3));
+        ctx.drawImage(pipeNorth, pipe[i].x, pipe[i].y + pipe[i].offset);
+        ctx.drawImage(pipeSouth, pipe[i].x, pipe[i].y + constant + pipe[i].offset);
         pipe[i].x--;
         if (pipe[i].x == 0) {
             pipe.push({
-                x: pipe[pipe.length-1].x + 150 + Math.floor(120 * gaussianRandom(5)),
-                y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height
+                x: pipe[pipe.length - 1].x + 150 + Math.floor(120 * gaussianRandom(5)),
+                y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height,
+                freq: 2 * Math.PI * gaussianRandom(5) * 1 / 500,
+                A: 20 + 50 * gaussianRandom(5),
+                offset: 0,
             });
         }
         // detect collision
-        if (bX + bird.width - 2 >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipeNorth.height || bY + bird.height - 2 >= pipe[i].y + constant)) {
+        if (bX + bird.width - 2 >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipe[i].offset + pipeNorth.height || bY + bird.height - 2 >= pipe[i].y + pipe[i].offset + constant)) {
             location.reload(); // reload the page
         }
         if (pipe[i].x == 5) {
