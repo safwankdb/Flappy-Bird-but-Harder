@@ -78,6 +78,7 @@ for (var i = 0; i < 3; i++) {
         y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height,
         freq: 2 * Math.PI * gaussianRandom(5) * 1 / 500,
         A: 20 + 50 * gaussianRandom(5),
+        phase: Math.random()*2*Math.PI,
         offset: 0,
     }
     )
@@ -90,7 +91,7 @@ function draw() {
         return item.x > -60
     })
     for (var i = 0; i < pipe.length; i++) {
-        pipe[i].offset = pipe[i].A * Math.sin(pipe[i].freq * pipe[i].x);
+        pipe[i].offset = pipe[i].A * Math.sin(pipe[i].freq * pipe[i].x + pipe[i].phase);
         pipe[i].offset = Math.min(pipe[i].offset, -pipe[i].y);  
     }
     for (var i = 0; i < pipe.length; i++) {
@@ -104,6 +105,7 @@ function draw() {
                 y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height,
                 freq: 2 * Math.PI * gaussianRandom(5) * 1 / 500,
                 A: 20 + 50 * gaussianRandom(5),
+                phase: Math.random()*Math.PI/2,
                 offset: 0,
             });
         }
