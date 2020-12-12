@@ -29,6 +29,10 @@ var gravity = 0.035;
 var vY = 0;
 var score = 0;
 var paused = false;
+var step = 1;
+var speedup_factor = 1.05;
+
+
 // audio files
 
 var fly = new Audio();
@@ -78,11 +82,13 @@ for (var i = 0; i < 3; i++) {
         y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height,
         freq: 2 * Math.PI * gaussianRandom(5) * 1 / 500,
         A: 20 + 50 * gaussianRandom(5),
-        phase: Math.random()*2*Math.PI,
+        phase: Math.random() * 2 * Math.PI,
         offset: 0,
+        passed: false,
     }
     )
 }
+
 
 // draw images
 function draw() {
@@ -92,30 +98,33 @@ function draw() {
     })
     for (var i = 0; i < pipe.length; i++) {
         pipe[i].offset = pipe[i].A * Math.sin(pipe[i].freq * pipe[i].x + pipe[i].phase);
-        pipe[i].offset = Math.min(pipe[i].offset, -pipe[i].y);  
+        pipe[i].offset = Math.min(pipe[i].offset, -pipe[i].y);
     }
     for (var i = 0; i < pipe.length; i++) {
         constant = pipeNorth.height + 80 + 40 * Math.floor(gaussianRandom(3));
         ctx.drawImage(pipeNorth, pipe[i].x, pipe[i].y + pipe[i].offset);
         ctx.drawImage(pipeSouth, pipe[i].x, pipe[i].y + constant + pipe[i].offset);
-        pipe[i].x--;
-        if (pipe[i].x == 0) {
+        pipe[i].x -= step;
+        if (pipe[i].x <= 0) {
             pipe.push({
                 x: pipe[pipe.length - 1].x + 150 + Math.floor(120 * gaussianRandom(5)),
                 y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height,
                 freq: 2 * Math.PI * gaussianRandom(5) * 1 / 500,
                 A: 20 + 50 * gaussianRandom(5),
-                phase: Math.random()*Math.PI/2,
+                phase: Math.random() * Math.PI / 2,
                 offset: 0,
+                passed: false,
             });
         }
         // detect collision
         if (bX + bird.width - 2 >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipe[i].offset + pipeNorth.height || bY + bird.height - 2 >= pipe[i].y + pipe[i].offset + constant)) {
             location.reload(); // reload the page
         }
-        if (pipe[i].x == 5) {
+        if (pipe[i].x <= 0 && !pipe[i].passed) {
             score++;
             scor.play();
+            step *= speedup_factor;
+            pipe[i].passed = true;
         }
     }
 
