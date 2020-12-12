@@ -30,7 +30,12 @@ var vY = 0;
 var score = 0;
 var paused = false;
 var step = 1;
-var speedup_factor = 1.05;
+var step_speedup_factor = 1.02;
+var A_speedup_factor = 1.1;
+var F_speedup_factor = 1.1;
+var A = 20;
+var F = 1 / 400;
+var highscore = localStorage.getItem("highscore");
 
 
 // audio files
@@ -80,8 +85,8 @@ for (var i = 0; i < 3; i++) {
     pipe.push({
         x: cvs.width + 200 * i + Math.floor(100 * gaussianRandom(5)),
         y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height,
-        freq: 2 * Math.PI * gaussianRandom(5) * 1 / 500,
-        A: 20 + 50 * gaussianRandom(5),
+        freq: 2 * Math.PI * Math.random() * F,
+        A: A * Math.random(),
         phase: Math.random() * 2 * Math.PI,
         offset: 0,
         passed: false,
@@ -101,17 +106,17 @@ function draw() {
         pipe[i].offset = Math.min(pipe[i].offset, -pipe[i].y);
     }
     for (var i = 0; i < pipe.length; i++) {
-        constant = pipeNorth.height + 80 + 40 * Math.floor(gaussianRandom(3));
+        constant = pipeNorth.height + 100 + 40 * Math.floor(gaussianRandom(3));
         ctx.drawImage(pipeNorth, pipe[i].x, pipe[i].y + pipe[i].offset);
         ctx.drawImage(pipeSouth, pipe[i].x, pipe[i].y + constant + pipe[i].offset);
         pipe[i].x -= step;
         if (pipe[i].x <= 0) {
             pipe.push({
-                x: pipe[pipe.length - 1].x + 150 + Math.floor(120 * gaussianRandom(5)),
+                x: pipe[pipe.length - 1].x + 180 + Math.floor(120 * gaussianRandom(5)),
                 y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height,
-                freq: 2 * Math.PI * gaussianRandom(5) * 1 / 500,
-                A: 20 + 50 * gaussianRandom(5),
-                phase: Math.random() * Math.PI / 2,
+                freq: 2 * Math.PI * (0.6+0.4*Math.random()) * F,
+                A: A * (0.6+0.4*Math.random()),
+                phase: Math.random() * Math.PI * 2,
                 offset: 0,
                 passed: false,
             });
@@ -123,31 +128,37 @@ function draw() {
         if (pipe[i].x <= 0 && !pipe[i].passed) {
             score++;
             scor.play();
-            step *= speedup_factor;
+            step *= step_speedup_factor;
+            A *= A_speedup_factor;
+            A = Math.min(100, A)
+            F *= F_speedup_factor;
+            F = Math.min(1/50, F);
             pipe[i].passed = true;
         }
     }
-
     ctx.drawImage(fg, 0, cvs.height - fg.height, cvs.height, fg.height);
-
     ctx.drawImage(bird, bX, bY);
-
     bY += -vY + gravity * (2 * t + 1);
     t++;
-
     if (bY + bird.height >= cvs.height - fg.height) {
         location.reload();
     }
-
-    ctx.fillStyle = "#000";
-    ctx.font = "20px Verdana";
-    ctx.fillText("Score : " + score, 10, cvs.height - 20);
-
     if (!paused) {
         requestAnimationFrame(draw);
     }
-
-
+    if(highscore !== null){
+        if (score > highscore) {
+            localStorage.setItem("highscore", score);      
+        }
+    }
+    else{
+        localStorage.setItem("highscore", score);
+    }    
+    ctx.fillStyle = "#000";
+    ctx.font = "20px Verdana";
+    ctx.fillText("Score : " + score, 10, cvs.height - 20);
+    ctx.fillText("High Score : " + highscore, cvs.width/2 + 10, cvs.height - 20);
+    console.log(A, F);
 }
 
 draw();
