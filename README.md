@@ -9,14 +9,13 @@ Trying to fix a flappy bird forked from a shitty implementation.
 - [x] Smooth jumps by tuning gravity and jump
 - [x] Tune Bird placement
 - [x] Fix canvas size and orientation
-- [ ] Fix bird going out off canvas
+- [x] Fix bird going out off canvas
 - [x] Pop redundant pipes from array
-- [ ] Randomize gap length
-- [ ] Random pipe length
-- [ ] Random distance between obstacles
+- [x] Randomize gap length
+- [x] Random pipe length
+- [x] Random distance between obstacles
 - [ ] Moving pipes??
 - [ ] Increasing speed with time?
 - [ ] Fix hit detection with a relax parameter?
 - [ ] Rewrite hit detection with distance transform??
 - [ ] Add more assets??
-

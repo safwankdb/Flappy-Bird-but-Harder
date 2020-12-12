@@ -49,11 +49,11 @@ function togglePause() {
 
 function pauseGameKeyHandler(e) {
     var keyCode = e.keyCode;
-    switch(keyCode){
-       case 32: //space
-         togglePause();
-         break;
-     }
+    switch (keyCode) {
+        case 32: //space
+            togglePause();
+            break;
+    }
 }
 
 function moveUp() {
@@ -62,51 +62,49 @@ function moveUp() {
     fly.play();
 }
 
+function gaussianRandom(samples) {
+    var ans = 0;
+    for (let i = 0; i < samples; i++) {
+        ans += Math.random();
+    }
+    return ans / samples;
+}
+
 // pipe coordinates
-
 var pipe = [];
-
-pipe[0] = {
-    x: cvs.width,
-    y: 0
-};
+for (var i = 0; i < 3; i++) {
+    pipe.push({
+        x: cvs.width + 200 * i + Math.floor(100 * gaussianRandom(5)),
+        y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height
+    }
+    )
+}
 
 // draw images
-
 function draw() {
-
     ctx.drawImage(bg, 0, 0, cvs.height, cvs.height);
-
-    pipe = pipe.filter(function(item) {
+    pipe = pipe.filter(function (item) {
         return item.x > -60
     })
-
     for (var i = 0; i < pipe.length; i++) {
-
-        constant = pipeNorth.height + gap;
+        constant = pipeNorth.height + 80+40*Math.floor(gaussianRandom(3));
         ctx.drawImage(pipeNorth, pipe[i].x, pipe[i].y);
         ctx.drawImage(pipeSouth, pipe[i].x, pipe[i].y + constant);
-
         pipe[i].x--;
-
-        if (pipe[i].x == 250) {
+        if (pipe[i].x == 0) {
             pipe.push({
-                x: cvs.width,
-                y: Math.floor(Math.random() * pipeNorth.height) - pipeNorth.height
+                x: pipe[pipe.length-1].x + 150 + Math.floor(120 * gaussianRandom(5)),
+                y: Math.floor(gaussianRandom(3) * pipeNorth.height) - pipeNorth.height
             });
         }
-
         // detect collision
-
-        if (bX + bird.width-2 >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipeNorth.height || bY + bird.height-2 >= pipe[i].y + constant) || bY + bird.height >= cvs.height - fg.height) {
+        if (bX + bird.width - 2 >= pipe[i].x && bX <= pipe[i].x + pipeNorth.width && (bY <= pipe[i].y + pipeNorth.height || bY + bird.height - 2 >= pipe[i].y + constant)) {
             location.reload(); // reload the page
         }
         if (pipe[i].x == 5) {
             score++;
             scor.play();
         }
-
-
     }
 
     ctx.drawImage(fg, 0, cvs.height - fg.height, cvs.height, fg.height);
@@ -116,14 +114,18 @@ function draw() {
     bY += -vY + gravity * (2 * t + 1);
     t++;
 
+    if (bY + bird.height >= cvs.height - fg.height) {
+        location.reload();
+    }
+
     ctx.fillStyle = "#000";
     ctx.font = "20px Verdana";
     ctx.fillText("Score : " + score, 10, cvs.height - 20);
 
-    if(!paused) {
+    if (!paused) {
         requestAnimationFrame(draw);
-     }
-     
+    }
+
 
 }
 
