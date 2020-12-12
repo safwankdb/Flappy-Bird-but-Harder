@@ -31,9 +31,9 @@ var score = 0;
 var paused = false;
 var step = 1;
 var step_speedup_factor = 1.02;
-var A_speedup_factor = 1.1;
-var F_speedup_factor = 1.1;
-var A = 20;
+var A_speedup_factor = 1.05;
+var F_speedup_factor = 1.05;
+var A = 5;
 var F = 1 / 400;
 var highscore = localStorage.getItem("highscore");
 
