@@ -29,12 +29,12 @@ var gravity = 0.035;
 var vY = 0;
 var score = 0;
 var paused = false;
-var step = 1;
+var step = 1.2;
 var step_speedup_factor = 1.02;
 var A_speedup_factor = 1.05;
 var F_speedup_factor = 1.05;
-var A = 5;
-var F = 1 / 400;
+var A = 10;
+var F = 1 / 200;
 var highscore = localStorage.getItem("highscore");
 
 

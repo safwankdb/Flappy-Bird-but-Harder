@@ -3,6 +3,8 @@ It's flappy bird, but its gets harder.
 
 Entry for DevCom's Game Kombat competition. Trying to fix a flappy bird forked from a shitty implementation. First JS project btw.
 
+Live Demo: [https://safwankdb.github.io/Flappy-Bird-but-Harder/]()
+
 ## TODO
 
 - [x] Add instructions on page.
