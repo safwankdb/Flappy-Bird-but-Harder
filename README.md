@@ -1,4 +1,5 @@
-# FlappyBird JS
+# Flappy Bird but Harder
+It's flappy bird, but its gets harder.
 
 Trying to fix a flappy bird forked from a shitty implementation. First JS project btw.
 
