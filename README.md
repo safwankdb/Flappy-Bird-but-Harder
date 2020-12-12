@@ -1,7 +1,7 @@
 # Flappy Bird but Harder
 It's flappy bird, but its gets harder.
 
-Trying to fix a flappy bird forked from a shitty implementation. First JS project btw.
+Entry for DevCom's Game Kombat competition. Trying to fix a flappy bird forked from a shitty implementation. First JS project btw.
 
 ## TODO
 
